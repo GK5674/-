@@ -5,6 +5,11 @@ on:
     branches: [ main ]
   pull_request:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,8 +24,42 @@ jobs:
           root_file: main.tex
           latexmk_use_lualatex: true
 
-      - name: Upload PDF
-        uses: actions/upload-artifact@v4
+      - name: Prepare Pages files
+        run: |
+          mkdir public
+          cp main.pdf public/
+          cat > public/index.html <<'EOF'
+          <!doctype html>
+          <html lang="ja">
+          <head>
+            <meta charset="utf-8">
+            <title>LaTeX PDF Preview</title>
+            <style>
+              body { margin: 0; }
+              iframe { width: 100vw; height: 100vh; border: none; }
+            </style>
+          </head>
+          <body>
+            <iframe src="./main.pdf"></iframe>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: compiled-pdf
-          path: main.pdf
+          path: public
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
