@@ -1,7 +1,42 @@
-\documentclass{article}
+\documentclass{ltjsarticle}
+
+\usepackage{luatexja}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\title{日本語LaTeXのひな形}
+\author{GK5674}
+\date{\today}
 
 \begin{document}
 
-Hello, GitHub Actions + LaTeX!
+\maketitle
+
+\section{はじめに}
+
+これはGitHub Actionsで自動ビルドする日本語LaTeX文書です。
+
+日本語が正しく表示されるか確認します。
+
+\section{数式の例}
+
+二次方程式の解の公式は次の通りです。
+
+\[
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+\]
+
+\section{箇条書きの例}
+
+\begin{itemize}
+  \item 日本語が使える
+  \item 数式が使える
+  \item GitHub ActionsでPDF化できる
+\end{itemize}
+
+\section{まとめ}
+
+このひな形をベースに、レポート・論文・資料を作れます。
 
 \end{document}
